@@ -1,4 +1,7 @@
+## Code Generation
 ```
-execDir="/c/Users/Apaar.Sharma/go/pkg/mod/k8s.io/code-generator@v0.23.1"
+execDir=~/go/pkg/mod/k8s.io/code-generator@v0.23.1
+
+$execDir/generate-groups.sh all github.com/apaarshrm39/Kluster/pkg/generated github.com/apaarshrm39/Kluster/pkg/apis "apaarshrm.dev:v1alpha1" --output-base "$(dirname "${BASH_SOURCE[0]}")/../../.."  --go-header-file ./hack/boilerplate.go.txt
 
 ```
