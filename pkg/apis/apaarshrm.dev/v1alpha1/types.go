@@ -27,6 +27,6 @@ type Nodepool struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type KlusterList struct {
 	metav1.TypeMeta
-	metav1.ObjectMeta
+	metav1.ListMeta
 	Items []Kluster
 }

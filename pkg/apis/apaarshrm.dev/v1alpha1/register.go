@@ -17,7 +17,7 @@ func init() {
 }
 
 func addKnownTypes(scheme *runtime.Scheme) error {
-	scheme.AddKnownTypes(SchemeGroupVersion, &kluster{}, &KlusterList{})
+	scheme.AddKnownTypes(SchemeGroupVersion, &Kluster{}, &KlusterList{})
 	metav1.AddToGroupVersion(scheme, SchemeGroupVersion)
 	return nil
 }
