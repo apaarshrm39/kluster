@@ -13,8 +13,7 @@ type Kluster struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   KlusterSpec   `json:"spec,omitempty"`
-	Status KlsuterStatus `json:"status,omitempty"`
+	Spec KlusterSpec `json:"spec,omitempty"`
 }
 
 type KlsuterStatus struct {
@@ -24,10 +23,9 @@ type KlsuterStatus struct {
 }
 
 type KlusterSpec struct {
-	Name        string `json:"name,omitempty"`
-	Region      string `json:"region,omitempty"`
-	Version     string `json:"version,omitempty"`
-	TokenSecret string `json:"tokenSecret,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Region  string `json:"region,omitempty"`
+	Version string `json:"version,omitempty"`
 
 	Nodepool []Nodepool `json:"nodepool,omitempty"`
 }

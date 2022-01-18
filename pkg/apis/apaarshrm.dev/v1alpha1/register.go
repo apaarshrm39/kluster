@@ -6,7 +6,7 @@ import (
 	scheme "k8s.io/apimachinery/pkg/runtime/schema"
 )
 
-var SchemeGroupVersion = scheme.GroupVersion{Group: "apaarshrm.dev", Version: "v1apha1"}
+var SchemeGroupVersion = scheme.GroupVersion{Group: "apaarshrm.dev", Version: "v1alpha1"}
 
 var (
 	SchemeBuilder runtime.SchemeBuilder

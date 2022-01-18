@@ -31,10 +31,10 @@ func main() {
 		panic(err)
 	}
 
-	kluster, err := klientset.ApaarshrmV1alpha1().Klusters("default").Get(context.TODO(), "kluster-1", metav1.GetOptions{})
+	kluster, err := klientset.ApaarshrmV1alpha1().Klusters("default").Get(context.Background(), "kluster-0", metav1.GetOptions{})
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(kluster.Kind)
+	fmt.Println(kluster.Name)
 }

@@ -46,7 +46,6 @@ func (in *Kluster) DeepCopyInto(out *Kluster) {
 	out.TypeMeta = in.TypeMeta
 	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
 	in.Spec.DeepCopyInto(&out.Spec)
-	out.Status = in.Status
 	return
 }
 
