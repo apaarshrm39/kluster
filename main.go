@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"path/filepath"
 
-	apaar "github.com/apaarshrm39/Kluster/pkg/apis/apaarshrm.dev/v1alpha1"
 	klient "github.com/apaarshrm39/Kluster/pkg/client/clientset/versioned"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/tools/clientcmd"
@@ -32,14 +31,10 @@ func main() {
 		panic(err)
 	}
 
-	kluster, err := klientset.ApaarshrmV1alpha1().Klusters("default").Get(context.TODO(), "cluster1", metav1.GetOptions{})
+	kluster, err := klientset.ApaarshrmV1alpha1().Klusters("default").Get(context.TODO(), "kluster-1", metav1.GetOptions{})
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(kluster)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(apaar.Kluster{})
+	fmt.Println(kluster.Kind)
 }

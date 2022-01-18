@@ -1,0 +1,14 @@
+apiVersion: apaarshrm.dev/v1alpha1
+kind: Kluster
+metadata:
+  name: kluster-1
+  namespace: default
+spec:
+  name: kluster-1
+  region: ap-south-1
+  version: "1.21.3-do.0"
+  tokenSecret: "default/dosecret"
+  nodepool: 
+  - count: 1
+    name: np1
+    size: big
