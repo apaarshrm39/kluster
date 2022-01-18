@@ -105,7 +105,7 @@ func (c *FakeKlusters) Update(ctx context.Context, kluster *v1alpha1.Kluster, op
 // Delete takes name of the kluster and deletes it. Returns an error if one occurs.
 func (c *FakeKlusters) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteActionWithOptions(klustersResource, c.ns, name, opts), &v1alpha1.Kluster{})
+		Invokes(testing.NewDeleteAction(klustersResource, c.ns, name), &v1alpha1.Kluster{})
 
 	return err
 }

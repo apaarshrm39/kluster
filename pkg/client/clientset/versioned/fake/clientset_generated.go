@@ -74,10 +74,7 @@ func (c *Clientset) Tracker() testing.ObjectTracker {
 	return c.tracker
 }
 
-var (
-	_ clientset.Interface = &Clientset{}
-	_ testing.FakeClient  = &Clientset{}
-)
+var _ clientset.Interface = &Clientset{}
 
 // ApaarshrmV1alpha1 retrieves the ApaarshrmV1alpha1Client
 func (c *Clientset) ApaarshrmV1alpha1() apaarshrmv1alpha1.ApaarshrmV1alpha1Interface {

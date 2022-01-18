@@ -10,6 +10,7 @@ var SchemeGroupVersion = scheme.GroupVersion{Group: "apaarshrm.dev", Version: "v
 
 var (
 	SchemeBuilder runtime.SchemeBuilder
+	AddToScheme   = SchemeBuilder.AddToScheme
 )
 
 func init() {
