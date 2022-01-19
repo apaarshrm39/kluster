@@ -1,13 +1,13 @@
 package main
 
 import (
-	"context"
 	"flag"
-	"fmt"
 	"path/filepath"
+	"time"
 
 	klient "github.com/apaarshrm39/Kluster/pkg/client/clientset/versioned"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kinformer "github.com/apaarshrm39/Kluster/pkg/client/informers/externalversions"
+	kontroller "github.com/apaarshrm39/Kluster/pkg/controller"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 )
@@ -31,10 +31,15 @@ func main() {
 		panic(err)
 	}
 
-	kluster, err := klientset.ApaarshrmV1alpha1().Klusters("default").Get(context.Background(), "kluster-0", metav1.GetOptions{})
-	if err != nil {
-		fmt.Println(err)
-	}
+	infofac := kinformer.NewSharedInformerFactory(klientset, 10*time.Minute)
 
-	fmt.Println(kluster.Name)
+	// CREATE kluster informer
+	klusterInformer := infofac.Apaarshrm().V1alpha1().Klusters()
+
+	k := kontroller.New(*klientset, klusterInformer)
+	ch := make(chan struct{})
+
+	//STart infofac
+	infofac.Start(ch)
+	k.Run(ch)
 }
