@@ -3,6 +3,7 @@ package controller
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -11,6 +12,7 @@ import (
 	kinformer "github.com/apaarshrm39/Kluster/pkg/client/informers/externalversions/apaarshrm.dev/v1alpha1"
 	klister "github.com/apaarshrm39/Kluster/pkg/client/listers/apaarshrm.dev/v1alpha1"
 	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
 )
@@ -25,14 +27,17 @@ type Controller struct {
 	queue workqueue.RateLimitingInterface
 	// we will need a lister
 	klusterLister klister.KlusterLister
+	// kubernetes clientset
+	k8sclient kubernetes.Clientset
 }
 
-func New(klient klient.Clientset, klusterInformer kinformer.KlusterInformer) *Controller {
+func New(klient klient.Clientset, klusterInformer kinformer.KlusterInformer, client kubernetes.Clientset) *Controller {
 	k := &Controller{
 		clientset:     klient,
 		hasSynced:     klusterInformer.Informer().HasSynced,
 		queue:         workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), "kqueue"),
 		klusterLister: klusterInformer.Lister(),
+		k8sclient:     client,
 	}
 
 	// Add Eventhandler
@@ -81,11 +86,13 @@ func (k Controller) process() bool {
 		return false
 	}
 
-	kluster, err := k.clientset.ApaarshrmV1alpha1().Klusters(ns).Get(context.Background(), n, metav1.GetOptions{})
+	secret, err := k.klusterLister.Klusters(ns).Get(n)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
 
-	spec := kluster.Spec
-
-	fmt.Println(spec)
+	fmt.Println(k.getSecret(secret.Spec.SecretToken))
 
 	return true
 }
@@ -103,4 +110,21 @@ func (k Controller) handleDelete(obj interface{}) {
 func (k Controller) handleUpdate(oldObj interface{}, newObj interface{}) {
 	fmt.Println("Delete event was executed")
 	k.queue.Add(newObj)
+}
+
+func (k Controller) getSecret(secret string) string {
+	fmt.Println("Get SEcret called")
+	n := strings.Split(secret, "/")
+	fmt.Println("split secret", n)
+	sec, err := k.k8sclient.CoreV1().Secrets(n[0]).Get(context.Background(), n[1], metav1.GetOptions{})
+	if err != nil {
+		fmt.Println(err)
+	}
+	//token, err := base64.StdEncoding.DecodeString(sec.Data["token"])
+	//if err != nil {
+	//	fmt.Println(err)
+	//	}
+
+	return string(sec.Data["token"])
+
 }

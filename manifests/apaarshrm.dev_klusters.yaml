@@ -56,18 +56,9 @@ spec:
                 type: array
               region:
                 type: string
-              tokenSecret:
+              secretToken:
                 type: string
               version:
-                type: string
-            type: object
-          status:
-            properties:
-              klusterID:
-                type: string
-              kubeConfig:
-                type: string
-              progress:
                 type: string
             type: object
         type: object
