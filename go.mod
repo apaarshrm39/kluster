@@ -5,6 +5,7 @@ go 1.13
 replace github.com/graymeta/stow => github.com/graymeta/stow v0.1.0
 
 require (
+	github.com/digitalocean/godo v1.74.0
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
