@@ -3,9 +3,11 @@ package controller
 import (
 	"context"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
+	do "github.com/apaarshrm39/Kluster/pkg/do"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	klient "github.com/apaarshrm39/Kluster/pkg/client/clientset/versioned"
@@ -86,13 +88,21 @@ func (k Controller) process() bool {
 		return false
 	}
 
-	secret, err := k.klusterLister.Klusters(ns).Get(n)
+	kluster, err := k.klusterLister.Klusters(ns).Get(n)
 	if err != nil {
 		fmt.Println(err)
 		return false
 	}
 
-	fmt.Println(k.getSecret(secret.Spec.SecretToken))
+	token := k.getSecret(kluster.Spec.SecretToken)
+	fmt.Println(token)
+	clusterId, err := do.Create(token, kluster.Spec)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
+	log.Println("THe cluster ID is", clusterId)
 
 	return true
 }
