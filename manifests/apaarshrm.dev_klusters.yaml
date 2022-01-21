@@ -61,6 +61,15 @@ spec:
               version:
                 type: string
             type: object
+          status:
+            properties:
+              klusterID:
+                type: string
+              kubeConfig:
+                type: string
+              progress:
+                type: string
+            type: object
         type: object
     served: true
     storage: true

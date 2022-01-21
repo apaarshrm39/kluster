@@ -107,6 +107,10 @@ func (k Controller) process() bool {
 	return true
 }
 
+func (k *Controller) updateStatus(id, status string) {
+
+}
+
 func (k Controller) handleAdd(obj interface{}) {
 	fmt.Println("Add event was executed")
 	k.queue.Add(obj)
