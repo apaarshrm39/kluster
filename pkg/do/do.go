@@ -9,11 +9,17 @@ import (
 	"github.com/digitalocean/godo"
 )
 
-func Create(token string, spec kluster.KlusterSpec) (string, error) {
-	fmt.Println("Create DO cluster is called")
+func auth(token string) *godo.Client {
+	fmt.Println("Auth DO is called")
 	client := godo.NewFromToken(token)
-	ctx := context.TODO()
 	fmt.Println("DO cclient", client)
+
+	return client
+}
+
+func Create(token string, spec kluster.KlusterSpec) (string, error) {
+	client := auth(token)
+	ctx := context.TODO()
 
 	createRequest := &godo.KubernetesClusterCreateRequest{
 		Name:        spec.Name,
@@ -35,5 +41,18 @@ func Create(token string, spec kluster.KlusterSpec) (string, error) {
 	}
 
 	return cluster.ID, nil
+
+}
+
+func GetStatus(id string, token string) string {
+	client := auth(token)
+	ctx := context.TODO()
+
+	cluster, _, err := client.Kubernetes.Get(ctx, id)
+	if err != nil {
+		return "could not get the status from DO"
+	}
+
+	return string(cluster.Status.State)
 
 }

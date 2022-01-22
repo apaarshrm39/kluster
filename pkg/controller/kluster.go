@@ -10,6 +10,8 @@ import (
 	do "github.com/apaarshrm39/Kluster/pkg/do"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+	v1alpha1 "github.com/apaarshrm39/Kluster/pkg/apis/apaarshrm.dev/v1alpha1"
+
 	klient "github.com/apaarshrm39/Kluster/pkg/client/clientset/versioned"
 	kinformer "github.com/apaarshrm39/Kluster/pkg/client/informers/externalversions/apaarshrm.dev/v1alpha1"
 	klister "github.com/apaarshrm39/Kluster/pkg/client/listers/apaarshrm.dev/v1alpha1"
@@ -49,7 +51,7 @@ func New(klient klient.Clientset, klusterInformer kinformer.KlusterInformer, cli
 		UpdateFunc: k.handleUpdate,
 	})
 
-	// REturn the controller struct back
+	// Return the controller struct back
 	return k
 }
 
@@ -70,7 +72,7 @@ func (k Controller) worker() {
 	}
 }
 
-func (k Controller) process() bool {
+func (k *Controller) process() bool {
 	item, shutdown := k.queue.Get()
 	if shutdown {
 		return false
@@ -102,31 +104,40 @@ func (k Controller) process() bool {
 		return false
 	}
 
+	status := do.GetStatus(clusterId, token)
+	err = k.UpdateStatus(clusterId, status, kluster)
+	if err != nil {
+		log.Println(err)
+	}
 	log.Println("THe cluster ID is", clusterId)
 
 	return true
 }
 
-func (k *Controller) updateStatus(id, status string) {
+func (k *Controller) UpdateStatus(id string, status string, kluster *v1alpha1.Kluster) error {
+	kluster.Status.KlusterID = id
+	kluster.Status.Progress = status
+	_, err := k.clientset.ApaarshrmV1alpha1().Klusters(kluster.Namespace).UpdateStatus(context.Background(), kluster, metav1.UpdateOptions{})
 
+	return err
 }
 
-func (k Controller) handleAdd(obj interface{}) {
+func (k *Controller) handleAdd(obj interface{}) {
 	fmt.Println("Add event was executed")
 	k.queue.Add(obj)
 }
 
-func (k Controller) handleDelete(obj interface{}) {
+func (k *Controller) handleDelete(obj interface{}) {
 	fmt.Println("Delete event was executed")
 	k.queue.Add(obj)
 }
 
-func (k Controller) handleUpdate(oldObj interface{}, newObj interface{}) {
+func (k *Controller) handleUpdate(oldObj interface{}, newObj interface{}) {
 	fmt.Println("Delete event was executed")
-	k.queue.Add(newObj)
+	k.queue.Forget(newObj)
 }
 
-func (k Controller) getSecret(secret string) string {
+func (k *Controller) getSecret(secret string) string {
 	fmt.Println("Get SEcret called")
 	n := strings.Split(secret, "/")
 	fmt.Println("split secret", n)
