@@ -10,5 +10,5 @@ $execDir/generate-groups.sh all github.com/apaarshrm39/Kluster/pkg/generated git
 ```
 binary=~/go/bin
 
-binary/controller-gen paths=github.com/apaarshrm39/Kluster/pkg/apis/apaarshrm.dev/v1alpha1 crd:trivialVersions=true output:crd:artifacts:config=manifests
+$binary/controller-gen paths=github.com/apaarshrm39/Kluster/pkg/apis/apaarshrm.dev/v1alpha1 crd:trivialVersions=true output:crd:artifacts:config=manifests
 ```

@@ -27,4 +27,5 @@ require (
 	k8s.io/client-go v0.21.3
 	k8s.io/code-generator v0.20.1
 	k8s.io/utils v0.0.0-20210722164352-7f3ee0f31471 // indirect
+	sigs.k8s.io/controller-tools v0.2.5 // indirect
 )
